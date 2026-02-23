@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "required": ["id", "username", "email", "firstName", "lastName", "image"],
+  "properties": {
+    "id": { "type": "number" },
+    "username": { "type": "string" },
+    "email": { "type": "string" },
+    "firstName": { "type": "string" },
+    "lastName": { "type": "string" },
+    "image": { "type": "string" }
+  },
+  "additionalProperties": true
+}

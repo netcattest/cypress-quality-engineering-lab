@@ -1,0 +1,89 @@
+name: QA Pipeline
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Smoke Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Clean reports folder
+        run: npm run report:clean
+
+      - name: Run smoke tests
+        uses: cypress-io/github-action@v6
+        with:
+          install-command: npm ci
+          command: npm run test:smoke
+
+      - name: Generate HTML reports
+        if: always()
+        run: npm run report:html
+
+      - name: Upload smoke reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-smoke
+          path: cypress/reports
+          if-no-files-found: warn
+          retention-days: 14
+
+  regression:
+    name: Regression (${{ matrix.suite }})
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [api, ui]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Clean reports folder
+        run: npm run report:clean
+
+      - name: Run regression suite (${{ matrix.suite }})
+        uses: cypress-io/github-action@v6
+        with:
+          install-command: npm ci
+          command: npm run test:${{ matrix.suite }}
+
+      - name: Generate HTML reports
+        if: always()
+        run: npm run report:html
+
+      - name: Upload regression reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-regression-${{ matrix.suite }}
+          path: cypress/reports
+          if-no-files-found: warn
+          retention-days: 14

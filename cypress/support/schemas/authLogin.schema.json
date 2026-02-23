@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "required": ["id", "username", "accessToken", "refreshToken"],
+  "properties": {
+    "id": { "type": "number" },
+    "username": { "type": "string" },
+    "accessToken": { "type": "string" },
+    "refreshToken": { "type": "string" }
+  },
+  "additionalProperties": true
+}
