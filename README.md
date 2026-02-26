@@ -1,6 +1,18 @@
 <h1 align="center">Cypress Quality Engineering Lab</h1>
 <p align="center">
-  QA automation framework focused on UI, API, Contract, and Smoke testing.
+  Framework de automação de QA focado em testes UI, API, Contract e Smoke.
+</p>
+
+<p align="center">
+  <a href="./README.md">
+    <img src="https://flagcdn.com/br.svg" width="22" alt="Bandeira do Brasil" />
+    Português (Brasil)
+  </a>
+  &nbsp;|&nbsp;
+  <a href="./README.en.md">
+    <img src="https://flagcdn.com/us.svg" width="22" alt="Bandeira dos Estados Unidos" />
+    English
+  </a>
 </p>
 
 <p align="center">
@@ -9,7 +21,7 @@
   </a>
   <img src="https://img.shields.io/badge/Cypress-15.11.0-17202C?logo=cypress&logoColor=white" alt="Cypress" />
   <img src="https://img.shields.io/badge/Node.js-20%2B-339933?logo=node.js&logoColor=white" alt="Node" />
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT" />
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="Licença MIT" />
 </p>
 
 <div align="center">
@@ -18,71 +30,71 @@
 
 ---
 
-## Executive Summary
+## Resumo Executivo
 
-This repository demonstrates a professional QA engineering approach for test automation with Cypress.
-It includes scalable test architecture, functional and contract validation, CI orchestration, and test evidence generation.
+Este repositório demonstra uma abordagem profissional de engenharia de qualidade para automação de testes com Cypress.
+Inclui arquitetura escalável, validação funcional e de contrato, orquestração de CI e geração de evidências.
 
-Primary goals:
+Objetivos principais:
 
-- build a robust and maintainable test framework
-- separate execution strategies by risk and feedback speed
-- validate business behavior and API contracts
-- produce actionable reports for teams and stakeholders
+- construir um framework robusto e manutenível
+- separar estratégias de execução por risco e velocidade de feedback
+- validar comportamento de negócio e contratos de API
+- gerar relatórios acionáveis para times e stakeholders
 
-Latest improvements:
+Melhorias mais recentes:
 
-- Cypress upgraded to `15.11.0`
-- deterministic tests for critical API flows (no random test data generators)
-- stricter contract validation (`additionalProperties: false`)
-- migration path applied for Cypress env API (`Cypress.expose` + `allowCypressEnv: false`)
-- stronger pull request gate with `smoke` + `api/contract` validation
-- suite-level CI summaries (pass/fail/duration/flaky baseline)
-- expanded critical coverage (`/auth/refresh`, expired token, UI logout and post-login navigation)
-- runtime standardization with `engines`, `.nvmrc`, and `.node-version`
+- Cypress atualizado para `15.11.0`
+- testes determinísticos para fluxos críticos de API (sem geradores aleatórios)
+- validação de contrato mais rigorosa (`additionalProperties: false`)
+- migração aplicada para API de ambiente do Cypress (`Cypress.expose` + `allowCypressEnv: false`)
+- gate de pull request reforçado com validações `smoke` + `api/contract`
+- sumários de suíte no CI (pass/fail/duração/flaky baseline)
+- cobertura crítica expandida (`/auth/refresh`, token expirado, logout UI e navegação pós-login)
+- padronização de runtime com `engines`, `.nvmrc` e `.node-version`
 
-## Table of Contents
+## Sumário
 
-- [Architecture](#architecture)
-- [Test Strategy](#test-strategy)
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-- [Execution Commands](#execution-commands)
-- [Reporting and Evidence](#reporting-and-evidence)
-- [CI Pipeline](#ci-pipeline)
-- [Engineering Standards](#engineering-standards)
-- [Troubleshooting](#troubleshooting)
+- [Arquitetura](#arquitetura)
+- [Estratégia de Testes](#estratégia-de-testes)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Início Rápido](#início-rápido)
+- [Comandos de Execução](#comandos-de-execução)
+- [Relatórios e Evidências](#relatórios-e-evidências)
+- [Pipeline de CI](#pipeline-de-ci)
+- [Padrões de Engenharia](#padrões-de-engenharia)
+- [Solução de Problemas](#solução-de-problemas)
 - [Roadmap](#roadmap)
-- [License](#license)
+- [Licença](#licença)
 
-## Architecture
+## Arquitetura
 
-Core design decisions:
+Decisões principais de design:
 
-- **Layered test architecture**
-- **Single source of truth for routes/selectors/fixtures**
-- **Reusable API clients and Page Objects**
-- **Contract validation through JSON Schema + Ajv**
+- **Arquitetura de testes em camadas**
+- **Fonte única de verdade para rotas/seletores/fixtures**
+- **API Clients e Page Objects reutilizáveis**
+- **Validação de contrato com JSON Schema + Ajv**
 
-Main technical stack:
+Stack técnica principal:
 
 - Cypress 15
 - Node.js 20+
-- Ajv (schema validation)
-- Mochawesome (JSON + HTML reports)
-- GitHub Actions (continuous integration)
+- Ajv (validação de schema)
+- Mochawesome (relatórios JSON + HTML)
+- GitHub Actions (integração contínua)
 
-## Test Strategy
+## Estratégia de Testes
 
-| Suite | Purpose | Scope | Trigger |
+| Suite | Objetivo | Escopo | Trigger |
 |---|---|---|---|
-| Smoke | Fast health check | Critical user/API flows | Pull Request + Push |
-| API | Service behavior validation | Positive/negative auth, token expiration, and refresh scenarios | Pull Request + Push / Manual |
-| Contract | Response structure validation | `/auth/login` and `/auth/me` strict schemas | Pull Request + Push / Manual |
-| UI | Front-end behavior validation | Login success/failure/required fields/locked user + post-login navigation/logout | Push / Manual |
-| Regression | Broad validation gate | API + UI full suite | Push / Manual |
+| Smoke | Checagem rápida de saúde | Fluxos críticos de usuário/API | Pull Request + Push |
+| API | Validação de comportamento de serviço | Auth positivo/negativo, expiração de token e refresh | Pull Request + Push / Manual |
+| Contract | Validação de estrutura de resposta | Schemas estritos de `/auth/login` e `/auth/me` | Pull Request + Push / Manual |
+| UI | Validação de comportamento de front-end | Login sucesso/falha/campos obrigatórios/usuário bloqueado + navegação pós-login/logout | Push / Manual |
+| Regression | Gate amplo de validação | Suíte completa API + UI | Push / Manual |
 
-## Project Structure
+## Estrutura do Projeto
 
 ```text
 cypress-quality-engineering-lab/
@@ -113,38 +125,39 @@ cypress-quality-engineering-lab/
 |   `-- cypress-cli.js
 |-- cypress.config.js
 |-- package.json
-`-- README.md
+|-- README.md
+`-- README.en.md
 ```
 
-## Quick Start
+## Início Rápido
 
-Install dependencies:
+Instalar dependências:
 
 ```bash
 npm ci
 ```
 
-Validate local Cypress binary:
+Validar binário local do Cypress:
 
 ```bash
 npm run cy:verify
 ```
 
-Use the standardized Node runtime:
+Usar runtime padronizado de Node:
 
 ```bash
 nvm use
 ```
 
-## Execution Commands
+## Comandos de Execução
 
-Interactive mode:
+Modo interativo:
 
 ```bash
 npm run cy:open
 ```
 
-Headless suites:
+Suites headless:
 
 ```bash
 npm run test:smoke
@@ -154,15 +167,15 @@ npm run test:regression
 npm run report:summary -- smoke
 ```
 
-One-command local CI simulation:
+Simulação local de CI em um comando:
 
 ```bash
 npm run report
 ```
 
-## Reporting and Evidence
+## Relatórios e Evidências
 
-Generate reports manually:
+Gerar relatórios manualmente:
 
 ```bash
 npm run report:clean
@@ -171,62 +184,62 @@ npm run report:html
 npm run report:summary -- regression
 ```
 
-Open HTML reports on Windows:
+Abrir relatórios HTML no Windows:
 
 ```powershell
 Start-Process .\cypress\reports\html
 ```
 
-Report outputs:
+Saídas de relatório:
 
 - JSON: `cypress/reports/json/*.json`
 - HTML: `cypress/reports/html/*.html`
-- Suite summary (Markdown): `cypress/reports/summary/*.md`
-- Suite summary (JSON): `cypress/reports/summary/*.json`
+- Sumário de suíte (Markdown): `cypress/reports/summary/*.md`
+- Sumário de suíte (JSON): `cypress/reports/summary/*.json`
 
-## CI Pipeline
+## Pipeline de CI
 
-Workflow file: `.github/workflows/qa-ci.yml`
+Arquivo de workflow: `.github/workflows/qa-ci.yml`
 
-Pipeline design:
+Design do pipeline:
 
-- `smoke` job on `pull_request` and `push`
-- `api_contract` gate job (`test:api`) after `smoke`
-- `regression` matrix job (`api`, `ui`) on `push` and `workflow_dispatch`
-- suite summary published to GitHub Actions step summary
-- report artifacts uploaded for traceability
+- job `smoke` em `pull_request` e `push`
+- job `api_contract` de gate (`test:api`) após `smoke`
+- job `regression` em matrix (`api`, `ui`) em `push` e `workflow_dispatch`
+- sumário de suíte publicado no GitHub Actions step summary
+- artifacts de relatório enviados para rastreabilidade
 
-## Engineering Standards
+## Padrões de Engenharia
 
-Implemented practices:
+Práticas implementadas:
 
-- Page Object Model for UI flows
-- API Client abstraction for HTTP requests
-- Constants-first approach for selectors/routes/URLs
-- Fixture-based test data management
-- Contract-first validation for critical endpoints
-- Strict contract schema policy (`additionalProperties: false`)
-- Deterministic test inputs for critical API validations
-- Hardened negative assertions for authentication status handling
-- Naming conventions by test responsibility (`*.ui.cy.js`, `*.api.cy.js`, `*.contract.cy.js`)
+- Page Object Model para fluxos UI
+- abstração de API Client para requisições HTTP
+- abordagem constants-first para selectors/routes/URLs
+- gestão de dados de teste com fixtures
+- validação contract-first para endpoints críticos
+- política de schemas estritos (`additionalProperties: false`)
+- entradas determinísticas para validações críticas de API
+- asserções negativas endurecidas para autenticação
+- convenções de nomenclatura por responsabilidade (`*.ui.cy.js`, `*.api.cy.js`, `*.contract.cy.js`)
 
-## Troubleshooting
+## Solução de Problemas
 
-### Cypress fails with `bad option: --smoke-test`
+### Cypress falha com `bad option: --smoke-test`
 
-This project already mitigates the issue through `scripts/cypress-cli.js`, which removes `ELECTRON_RUN_AS_NODE` before running Cypress.
+Este projeto já mitiga o problema via `scripts/cypress-cli.js`, removendo `ELECTRON_RUN_AS_NODE` antes de executar Cypress.
 
-If you want to fix this globally on Windows:
+Se quiser corrigir globalmente no Windows:
 
 ```powershell
 [Environment]::SetEnvironmentVariable("ELECTRON_RUN_AS_NODE", $null, "User")
 ```
 
-Then open a new terminal session.
+Depois, abra uma nova sessão de terminal.
 
-### `npm` warns about Node engine version
+### `npm` alerta sobre versão de Node (engine)
 
-This project is standardized for Node 20 and defines it in `package.json` (`engines`) plus `.nvmrc`/`.node-version`.
+Este projeto está padronizado para Node 20 e define isso em `package.json` (`engines`) e também em `.nvmrc`/`.node-version`.
 
 Use:
 
@@ -234,16 +247,16 @@ Use:
 nvm use
 ```
 
-or install and run Node 20.x explicitly.
+ou instale e execute com Node 20.x.
 
 ## Roadmap
 
-- add test tagging strategy (`@smoke`, `@api`, `@ui`, `@contract`)
-- integrate linting/format quality gates in CI
-- publish release notes and changelog process
-- expand coverage to additional endpoints and UI modules
-- add test observability metrics (duration, flake trend, pass-rate)
+- adicionar estratégia de tags de teste (`@smoke`, `@api`, `@ui`, `@contract`)
+- integrar gates de qualidade de lint/format no CI
+- publicar processo de release notes e changelog
+- expandir cobertura para endpoints e módulos UI adicionais
+- evoluir observabilidade de testes (duração, tendência de flake, pass-rate)
 
-## License
+## Licença
 
 MIT
