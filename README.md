@@ -7,7 +7,7 @@
   <a href="https://github.com/netcattest/cypress-quality-engineering-lab/actions/workflows/qa-ci.yml">
     <img src="https://github.com/netcattest/cypress-quality-engineering-lab/actions/workflows/qa-ci.yml/badge.svg" alt="QA Pipeline" />
   </a>
-  <img src="https://img.shields.io/badge/Cypress-15.10.0-17202C?logo=cypress&logoColor=white" alt="Cypress" />
+  <img src="https://img.shields.io/badge/Cypress-15.11.0-17202C?logo=cypress&logoColor=white" alt="Cypress" />
   <img src="https://img.shields.io/badge/Node.js-20%2B-339933?logo=node.js&logoColor=white" alt="Node" />
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT" />
 </p>
@@ -29,6 +29,17 @@ Primary goals:
 - separate execution strategies by risk and feedback speed
 - validate business behavior and API contracts
 - produce actionable reports for teams and stakeholders
+
+Latest improvements:
+
+- Cypress upgraded to `15.11.0`
+- deterministic tests for critical API flows (no random test data generators)
+- stricter contract validation (`additionalProperties: false`)
+- migration path applied for Cypress env API (`Cypress.expose` + `allowCypressEnv: false`)
+- stronger pull request gate with `smoke` + `api/contract` validation
+- suite-level CI summaries (pass/fail/duration/flaky baseline)
+- expanded critical coverage (`/auth/refresh`, expired token, UI logout and post-login navigation)
+- runtime standardization with `engines`, `.nvmrc`, and `.node-version`
 
 ## Table of Contents
 
@@ -66,9 +77,9 @@ Main technical stack:
 | Suite | Purpose | Scope | Trigger |
 |---|---|---|---|
 | Smoke | Fast health check | Critical user/API flows | Pull Request + Push |
-| API | Service behavior validation | Positive and negative auth scenarios | Push / Manual |
-| Contract | Response structure validation | `/auth/login` and `/auth/me` schemas | Push / Manual |
-| UI | Front-end behavior validation | Login success/failure/required fields/locked user | Push / Manual |
+| API | Service behavior validation | Positive/negative auth, token expiration, and refresh scenarios | Pull Request + Push / Manual |
+| Contract | Response structure validation | `/auth/login` and `/auth/me` strict schemas | Pull Request + Push / Manual |
+| UI | Front-end behavior validation | Login success/failure/required fields/locked user + post-login navigation/logout | Push / Manual |
 | Regression | Broad validation gate | API + UI full suite | Push / Manual |
 
 ## Project Structure
@@ -78,6 +89,8 @@ cypress-quality-engineering-lab/
 |-- .github/
 |   `-- workflows/
 |       `-- qa-ci.yml
+|-- .nvmrc
+|-- .node-version
 |-- cypress/
 |   |-- e2e/
 |   |   |-- api/
@@ -88,6 +101,7 @@ cypress-quality-engineering-lab/
 |   |-- reports/
 |   |-- scripts/
 |   |   |-- clean-reports.js
+|   |   |-- generate-suite-summary.js
 |   |   `-- generate-html-reports.js
 |   `-- support/
 |       |-- api/clients/
@@ -116,6 +130,12 @@ Validate local Cypress binary:
 npm run cy:verify
 ```
 
+Use the standardized Node runtime:
+
+```bash
+nvm use
+```
+
 ## Execution Commands
 
 Interactive mode:
@@ -131,6 +151,7 @@ npm run test:smoke
 npm run test:api
 npm run test:ui
 npm run test:regression
+npm run report:summary -- smoke
 ```
 
 One-command local CI simulation:
@@ -147,6 +168,7 @@ Generate reports manually:
 npm run report:clean
 npm run test:regression
 npm run report:html
+npm run report:summary -- regression
 ```
 
 Open HTML reports on Windows:
@@ -159,6 +181,8 @@ Report outputs:
 
 - JSON: `cypress/reports/json/*.json`
 - HTML: `cypress/reports/html/*.html`
+- Suite summary (Markdown): `cypress/reports/summary/*.md`
+- Suite summary (JSON): `cypress/reports/summary/*.json`
 
 ## CI Pipeline
 
@@ -167,7 +191,9 @@ Workflow file: `.github/workflows/qa-ci.yml`
 Pipeline design:
 
 - `smoke` job on `pull_request` and `push`
+- `api_contract` PR gate job (`test:api`) after `smoke`
 - `regression` matrix job (`api`, `ui`) on `push` and `workflow_dispatch`
+- suite summary published to GitHub Actions step summary
 - report artifacts uploaded for traceability
 
 ## Engineering Standards
@@ -179,6 +205,9 @@ Implemented practices:
 - Constants-first approach for selectors/routes/URLs
 - Fixture-based test data management
 - Contract-first validation for critical endpoints
+- Strict contract schema policy (`additionalProperties: false`)
+- Deterministic test inputs for critical API validations
+- Hardened negative assertions for authentication status handling
 - Naming conventions by test responsibility (`*.ui.cy.js`, `*.api.cy.js`, `*.contract.cy.js`)
 
 ## Troubleshooting
@@ -194,6 +223,18 @@ If you want to fix this globally on Windows:
 ```
 
 Then open a new terminal session.
+
+### `npm` warns about Node engine version
+
+This project is standardized for Node 20 and defines it in `package.json` (`engines`) plus `.nvmrc`/`.node-version`.
+
+Use:
+
+```bash
+nvm use
+```
+
+or install and run Node 20.x explicitly.
 
 ## Roadmap
 

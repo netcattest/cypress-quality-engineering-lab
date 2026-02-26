@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Clean reports folder
@@ -36,11 +36,66 @@ jobs:
         if: always()
         run: npm run report:html
 
+      - name: Generate suite summary
+        if: always()
+        run: npm run report:summary -- smoke
+
+      - name: Publish suite summary
+        if: always()
+        run: cat cypress/reports/summary/smoke-summary.md >> $GITHUB_STEP_SUMMARY
+
       - name: Upload smoke reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: reports-smoke
+          path: cypress/reports
+          if-no-files-found: warn
+          retention-days: 14
+
+  api_contract:
+    name: API + Contract (PR Gate)
+    if: github.event_name == 'pull_request'
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Clean reports folder
+        run: npm run report:clean
+
+      - name: Run API + Contract tests
+        uses: cypress-io/github-action@v6
+        with:
+          install-command: npm ci
+          command: npm run test:api
+
+      - name: Generate HTML reports
+        if: always()
+        run: npm run report:html
+
+      - name: Generate suite summary
+        if: always()
+        run: npm run report:summary -- api-contract
+
+      - name: Publish suite summary
+        if: always()
+        run: cat cypress/reports/summary/api-contract-summary.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload API contract reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-pr-api-contract
           path: cypress/reports
           if-no-files-found: warn
           retention-days: 14
@@ -63,7 +118,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Clean reports folder
@@ -78,6 +133,14 @@ jobs:
       - name: Generate HTML reports
         if: always()
         run: npm run report:html
+
+      - name: Generate suite summary
+        if: always()
+        run: npm run report:summary -- ${{ matrix.suite }}
+
+      - name: Publish suite summary
+        if: always()
+        run: cat cypress/reports/summary/${{ matrix.suite }}-summary.md >> $GITHUB_STEP_SUMMARY
 
       - name: Upload regression reports
         if: always()

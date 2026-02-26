@@ -1,11 +1,26 @@
 {
   "type": "object",
-  "required": ["id", "username", "accessToken", "refreshToken"],
+  "required": [
+    "id",
+    "username",
+    "email",
+    "firstName",
+    "lastName",
+    "gender",
+    "image",
+    "accessToken",
+    "refreshToken"
+  ],
   "properties": {
     "id": { "type": "number" },
     "username": { "type": "string" },
+    "email": { "type": "string" },
+    "firstName": { "type": "string" },
+    "lastName": { "type": "string" },
+    "gender": { "type": "string" },
+    "image": { "type": "string" },
     "accessToken": { "type": "string" },
     "refreshToken": { "type": "string" }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

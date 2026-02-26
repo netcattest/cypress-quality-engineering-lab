@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=20 <21"
+  },
   "scripts": {
     "cy:open": "node scripts/cypress-cli.js open",
     "cy:run": "node scripts/cypress-cli.js run",
@@ -13,6 +16,7 @@
     "test:regression": "node scripts/cypress-cli.js run --spec \"cypress/e2e/api/**/*.cy.js,cypress/e2e/ui/**/*.cy.js\"",
     "report:clean": "node cypress/scripts/clean-reports.js",
     "report:html": "node cypress/scripts/generate-html-reports.js",
+    "report:summary": "node cypress/scripts/generate-suite-summary.js",
     "report": "npm run report:clean && npm run cy:run && npm run report:html"
   },
   "keywords": [],
@@ -21,10 +25,8 @@
   "type": "commonjs",
   "devDependencies": {
     "ajv": "^8.18.0",
-    "cypress": "^15.10.0",
-    "cypress-mochawesome-reporter": "^4.0.2",
+    "cypress": "^15.11.0",
     "mochawesome": "^7.1.4",
-    "mochawesome-merge": "^5.1.1",
     "mochawesome-report-generator": "^6.3.2"
   },
   "overrides": {

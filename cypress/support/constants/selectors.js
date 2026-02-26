@@ -5,3 +5,10 @@ export const LOGIN_PAGE_SELECTORS = Object.freeze({
   errorBanner: '[data-test="error"]',
   title: ".title",
 });
+
+export const INVENTORY_PAGE_SELECTORS = Object.freeze({
+  itemName: '[data-test="inventory-item-name"]',
+  menuButton: "#react-burger-menu-btn",
+  logoutLink: '[data-test="logout-sidebar-link"]',
+  backToProductsButton: '[data-test="back-to-products"]',
+});

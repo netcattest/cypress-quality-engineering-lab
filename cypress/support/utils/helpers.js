@@ -7,5 +7,5 @@ export function buildUrl(baseUrl, route) {
 }
 
 export function resolveDummyBaseUrl() {
-  return Cypress.env("dummyBaseUrl") || BASE_URLS.dummyJson;
+  return Cypress.expose("dummyBaseUrl") || BASE_URLS.dummyJson;
 }

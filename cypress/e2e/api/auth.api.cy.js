@@ -1,12 +1,11 @@
 import { DummyJSONClient } from "../../support/api/clients/dummyJson.client";
-import { createRandomExpiresInMins } from "../../support/utils/generators";
 
 describe("API - DummyJSON Auth", () => {
   it("should authenticate and return access metadata", () => {
     cy.fixture("users/dummy.valid").then((user) => {
       DummyJSONClient.login({
         ...user,
-        expiresInMins: createRandomExpiresInMins(20, 40),
+        expiresInMins: 30,
       }).then((res) => {
         expect(res.status).to.eq(200);
         expect(res.body).to.have.property("accessToken");

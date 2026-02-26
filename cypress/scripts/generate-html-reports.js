@@ -1,32 +1,33 @@
-/* eslint-disable no-console */
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const marge = require("mochawesome-report-generator");
 
 const jsonDir = path.join(process.cwd(), "cypress", "reports", "json");
 const htmlDir = path.join(process.cwd(), "cypress", "reports", "html");
 
 function ensureDir(dir) {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 }
 
 function safeName(name) {
   return name
-    .replace(/cypress[\\/]+e2e[\\/]+/i, "") // remove prefixo
-    .replace(/[/\\]/g, "-")                // separador vira '-'
+    .replace(/cypress[\\/]+e2e[\\/]+/i, "")
+    .replace(/[/\\]/g, "-")
     .replace(/\s+/g, "-")
     .replace(/[^a-zA-Z0-9._-]/g, "");
 }
 
-// tenta achar o path do spec dentro do JSON do mochawesome
 function getSpecNameFromMochawesome(json) {
-  // mochawesome geralmente traz: results[0].fullFile
   const candidate =
     json?.results?.[0]?.fullFile ||
     json?.results?.[0]?.file ||
     json?.stats?.filename;
 
-  if (!candidate) return null;
+  if (!candidate) {
+    return null;
+  }
 
   return safeName(candidate);
 }
@@ -35,11 +36,11 @@ async function run() {
   ensureDir(htmlDir);
 
   if (!fs.existsSync(jsonDir)) {
-    console.error("Pasta de JSON não existe:", jsonDir);
+    console.error("Pasta de JSON nao existe:", jsonDir);
     process.exit(1);
   }
 
-  const files = fs.readdirSync(jsonDir).filter((f) => f.endsWith(".json"));
+  const files = fs.readdirSync(jsonDir).filter((file) => file.endsWith(".json"));
 
   if (!files.length) {
     console.error("Nenhum JSON encontrado em:", jsonDir);
@@ -61,18 +62,18 @@ async function run() {
 
     await marge.create(content, {
       reportDir: htmlDir,
-      reportFilename: reportName,  // <<< nome do HTML
+      reportFilename: reportName,
       inlineAssets: true,
       charts: true,
     });
 
-    console.log("✅ HTML gerado:", path.join(htmlDir, `${reportName}.html`));
+    console.log("HTML gerado:", path.join(htmlDir, `${reportName}.html`));
   }
 
-  console.log("✅ Todos os HTMLs em:", htmlDir);
+  console.log("Todos os HTMLs em:", htmlDir);
 }
 
-run().catch((err) => {
-  console.error(err);
+run().catch((error) => {
+  console.error(error);
   process.exit(1);
 });
