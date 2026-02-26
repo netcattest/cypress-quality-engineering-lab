@@ -30,7 +30,7 @@
 
 ---
 
-## Resumo Executivo
+## Resumo
 
 Este repositório demonstra uma abordagem profissional de engenharia de qualidade para automação de testes com Cypress.
 Inclui arquitetura escalável, validação funcional e de contrato, orquestração de CI e geração de evidências.
