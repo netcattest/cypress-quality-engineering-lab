@@ -54,8 +54,7 @@ jobs:
           retention-days: 14
 
   api_contract:
-    name: API + Contract (PR Gate)
-    if: github.event_name == 'pull_request'
+    name: API + Contract Gate
     needs: smoke
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -95,7 +94,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: reports-pr-api-contract
+          name: reports-api-contract
           path: cypress/reports
           if-no-files-found: warn
           retention-days: 14

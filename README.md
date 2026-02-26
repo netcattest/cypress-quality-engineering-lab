@@ -191,7 +191,7 @@ Workflow file: `.github/workflows/qa-ci.yml`
 Pipeline design:
 
 - `smoke` job on `pull_request` and `push`
-- `api_contract` PR gate job (`test:api`) after `smoke`
+- `api_contract` gate job (`test:api`) after `smoke`
 - `regression` matrix job (`api`, `ui`) on `push` and `workflow_dispatch`
 - suite summary published to GitHub Actions step summary
 - report artifacts uploaded for traceability
